@@ -28,6 +28,8 @@ namespace Elastic.Installer
             public static readonly string DotMsi = ".msi";
             public static readonly string DotCmd = ".cmd";
             public static readonly string DotZip = ".zip";
+            public static readonly string DotTxt = ".txt";
+            public static readonly string DotMd = ".md";
         }
 
         public static class Files

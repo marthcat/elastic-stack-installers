@@ -7,7 +7,6 @@
   metricsets:
     - cpu
     - memory
-    - network
     - process
     - process_summary
     - socket_summary
