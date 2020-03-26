@@ -1,0 +1,71 @@
+- type: log
+  enabled: ${BLUECATS_MSS10:false}
+  ignore_older: 48h  
+  fields_under_root: true
+  fields: 
+    tag: "logs.mss.10.monitoring.alive"
+  multiline.pattern: '^\d\d\d\d-\d\d-\d\d'
+  multiline.negate: true
+  multiline.match: after
+  paths:
+    - ${BLUECATS_MSS10_ROOTDIR:d:/mss10/}/monitoring/alive/*.log
+
+- type: log
+  enabled: ${BLUECATS_MSS10:false}
+  ignore_older: 48h
+  fields_under_root: true
+  fields: 
+    tag: "logs.mss.10.monitoring.main"
+  multiline.pattern: '^\d\d\d\d-\d\d-\d\d'
+  multiline.negate: true
+  multiline.match: after
+  paths:
+    - ${BLUECATS_MSS10_ROOTDIR:d:/mss10/}/monitoring/main/*.log
+
+- type: log
+  enabled: ${BLUECATS_MSS10:false}
+  ignore_older: 48h  
+  fields_under_root: true
+  fields: 
+    tag: "logs.mss.10.inference.agent"
+  multiline.pattern: '^\d\d\d\d-\d\d-\d\d'
+  multiline.negate: true
+  multiline.match: after
+  paths:
+    - ${BLUECATS_MSS10_ROOTDIR:d:/mss10/}/inference/agent/*/*.log
+
+- type: log
+  enabled: ${BLUECATS_MSS10:false}
+  ignore_older: 48h  
+  fields_under_root: true
+  fields: 
+    tag: "logs.mss.10.inference.manager"
+  multiline.pattern: '^\d\d\d\d-\d\d-\d\d'
+  multiline.negate: true
+  multiline.match: after
+  paths:
+    - ${BLUECATS_MSS10_ROOTDIR:d:/mss10/}/inference/manager/*/*.log
+
+- type: log
+  enabled: ${BLUECATS_MSS10:false}
+  ignore_older: 48h  
+  fields_under_root: true
+  fields: 
+    tag: "logs.mss.10.runner.agent"
+  multiline.pattern: '^\d\d\d\d-\d\d-\d\d'
+  multiline.negate: true
+  multiline.match: after
+  paths:
+    - ${BLUECATS_MSS10_ROOTDIR:d:/mss10/}/runner/agent/*/*.log
+
+- type: log
+  enabled: ${BLUECATS_MSS10:false}
+  ignore_older: 48h  
+  fields_under_root: true
+  fields: 
+    tag: "logs.mss.10.runner.worker"
+  multiline.pattern: '^\d\d\d\d-\d\d-\d\d'
+  multiline.negate: true
+  multiline.match: after
+  paths:
+    - ${BLUECATS_MSS10_ROOTDIR:d:/mss10/}/runner/worker/*/*.log

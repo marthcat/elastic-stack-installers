@@ -191,21 +191,19 @@ namespace Elastic.PackageCompiler.Beats
             var beatConfigExampleFileId = beatConfigExampleFileName + "_" + (uint) beatConfigExampleFileName.GetHashCode32();
 
             project.AddProperty(new Property("WIXUI_EXITDIALOGOPTIONALTEXT",
-                $"NOTE: Only Administrators can modify configuration files! We put an example configuration file " +
-                $"in the data directory caled {ap.CanonicalTargetName}.example.yml. Please copy this example file to " +
-                $"{ap.CanonicalTargetName}.yml and make changes according to your environment. Once {ap.CanonicalTargetName}.yml " +
-                $"is created, you can configure {ap.CanonicalTargetName} from your favorite shell (in an elevated prompt) " +
-                $"and then start {serviceDisplayName} Windows service.\r\n"));
+                $"NOTE: start {serviceDisplayName} Windows service.\n"));
 
+            /*
             project.AddProperty(new Property("WIXUI_EXITDIALOGOPTIONALCHECKBOX", "1"));
             project.AddProperty(new Property("WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT",
                 $"Open {ap.CanonicalTargetName} data directory in Windows Explorer"));
+            
 
             // We'll open the folder for now
             // TODO: select file in explorer window
             project.AddProperty(new Property(
                 "WixShellExecTarget",
-                $"[$Component.{beatConfigExampleFileId}]"));
+                $"[$Component.CommonAppDataFolder.Elastic.Beats]"));
 
             project.AddWixFragment("Wix/Product",
                 XElement.Parse(@"
@@ -224,38 +222,70 @@ namespace Elastic.PackageCompiler.Beats
         Value=""CA_SelectExampleYamlInExplorer"">WIXUI_EXITDIALOGOPTIONALCHECKBOX=1 and NOT Installed
     </Publish>
 </UI>"));
+*/
 
-            var dataContents = new DirectoryInfo(opts.PackageInDir)
-                .GetFiles(MagicStrings.Files.AllDotYml, SearchOption.TopDirectoryOnly)
-                .Select(fi =>
-                {
-                    var wf = new WixSharp.File(fi.FullName);
+            List<WixEntity> dataContents = new List<WixEntity>();
 
-                    // rename main config file to hide it from MSI engine and keep customizations
-                    if (string.Compare(
-                        fi.Name,
-                        ap.CanonicalTargetName + MagicStrings.Ext.DotYml,
-                        StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.IsNullOrEmpty(opts.ExtraDir))
+            {
+                dataContents = new DirectoryInfo(opts.PackageInDir)
+                    .GetFiles(MagicStrings.Files.AllDotYml, SearchOption.TopDirectoryOnly)
+                    .Select(fi =>
                     {
-                        wf.Attributes.Add("Name", beatConfigExampleFileName);
-                        wf.Id = new Id(beatConfigExampleFileId);
-                    }
+                        var wf = new WixSharp.File(fi.FullName);
 
-                    return wf;
-                })
-                .ToList<WixEntity>();
+                        // rename main config file to hide it from MSI engine and keep customizations
+                        if (string.Compare(
+                                fi.Name,
+                                ap.CanonicalTargetName + MagicStrings.Ext.DotYml,
+                                StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                            wf.Attributes.Add("Name", beatConfigExampleFileName);
+                            wf.Id = new Id(beatConfigExampleFileId);
+                        }
 
-            dataContents.AddRange(
-                pc.MutableDirs
-                    .Select(dirName =>
-                    {
-                        var dirPath = Path.Combine(opts.PackageInDir, dirName);
-
-                        return Directory.Exists(dirPath)
-                            ? new Dir(dirName, new Files(Path.Combine(dirPath, MagicStrings.Files.All)))
-                            : null;
+                        return wf;
                     })
-                    .Where(dir => dir != null));
+                    .ToList<WixEntity>();
+
+                dataContents.AddRange(
+                    pc.MutableDirs
+                        .Select(dirName =>
+                        {
+                            var dirPath = Path.Combine(opts.PackageInDir, dirName);
+
+                            return Directory.Exists(dirPath)
+                                ? new Dir(dirName, new Files(Path.Combine(dirPath, MagicStrings.Files.All)))
+                                : null;
+                        })
+                        .Where(dir => dir != null));
+            }
+            else
+            {
+
+                var extraDir = Path.Combine(opts.ExtraDir, ap.TargetName);
+
+                dataContents.AddRange(
+                    new DirectoryInfo(extraDir)
+                        .GetFiles(MagicStrings.Files.AllDotYml, SearchOption.TopDirectoryOnly)
+                        .Select(fi =>
+                        {
+                            var wf = new WixSharp.File(fi.FullName);
+                            return wf;
+                        }));
+
+                dataContents.AddRange(
+                    new DirectoryInfo(extraDir)
+                        .GetDirectories()
+                        .Select(dir => dir.Name)
+                        .Select(dirName =>
+                            new Dir(
+                                dirName,
+                                new Files(Path.Combine(
+                                    extraDir,
+                                    dirName,
+                                    MagicStrings.Files.All)))));
+            }
 
             // Drop CLI shim on disk
             var cliShimScriptPath = Path.Combine(
@@ -284,27 +314,9 @@ namespace Elastic.PackageCompiler.Beats
                     new Dir(companyName,
                         new Dir(productSetName,
                             new Dir(ap.CanonicalTargetName, dataContents.ToArray())
-                            {
-                                GenericItems = new []
-                                {
-                                    /*
-                                    This will *replace* ACL on the {beatname} directory:
+                            , new DirPermission("Users", "[MachineName]", GenericPermission.All)
+                            )))
 
-                                    Directory tree:
-                                        NT AUTHORITY\SYSTEM:(OI)(CI)F
-                                        BUILTIN\Administrators:(OI)(CI)F
-                                        BUILTIN\Users:(CI)R
-
-                                    Files:
-                                        NT AUTHORITY\SYSTEM:(ID)F
-                                        BUILTIN\Administrators:(ID)F
-                                    */
-
-                                    new MsiLockPermissionEx(
-                                        "D:PAI(A;OICI;FA;;;SY)(A;OICI;FA;;;BA)(A;CI;0x1200a9;;;BU)",
-                                        ap.Is64Bit)
-                                }
-                            })))
             };
 
             // CLI Shim path

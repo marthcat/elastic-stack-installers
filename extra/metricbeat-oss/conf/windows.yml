@@ -1,0 +1,13 @@
+- module: windows
+  metricsets:
+    - perfmon
+  period: 30s
+  perfmon.ignore_non_existent_counters: true
+  perfmon.group_measurements_by_instance: true  
+  perfmon.counters:
+    - instance_label: nic.name
+      measurement_label: nic.in.per_sec
+      query: '\Network Interface(*)\Bytes Received/sec'
+    - instance_label: nic.name
+      measurement_label: nic.out.per_sec
+      query: '\Network Interface(*)\Bytes Sent/sec'
