@@ -4,6 +4,7 @@
   fields_under_root: true
   fields: 
     tag: "logs.dms.50"  
+  tags: ["DMS50"]
   harvester_limitedit: 1
   multiline.pattern: '^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^[1-9]'
   multiline.negate: true
