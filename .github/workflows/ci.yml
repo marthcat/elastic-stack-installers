@@ -28,4 +28,4 @@ jobs:
     - name: Build config-tool
       run: | 
         cd ./src/bluecats_preconfig/
-        dotnet build -c release -r win7_x86
+        dotnet build -c release -r win7-x86
