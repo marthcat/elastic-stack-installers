@@ -29,3 +29,10 @@ jobs:
       run: | 
         cd ./src/bluecats_preconfig/
         dotnet publish -c release -r win7-x86 --self-contained
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: bluecats_preconfig
+        # Directory containing files to upload
+        path: ./src/bluecats_preconfig/bin/Release/netcoreapp3.1/Win7-x86/publish
