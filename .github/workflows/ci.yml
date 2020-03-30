@@ -32,3 +32,20 @@ jobs:
         name: metricbeat
         # Directory containing files to upload
         path: ./bin/out/metricbeat/metricbeat-oss-7.6.1-windows-x86.msi
+  release:
+    runs-on: windows-latest
+    needs: [build]
+    steps:
+    - uses: actions/checkout@master
+    - name: Create release
+      uses: Roang-zero1/github-create-release-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create GitHub release
+      uses: Roang-zero1/github-upload-release-artifacts-action@master
+      with:
+        args:
+        - dist/bin/
+        - dist/shell/compiled.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
