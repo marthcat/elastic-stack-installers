@@ -25,9 +25,6 @@ jobs:
     - name: release 폴더 생성
       run: |
         mkdir release
-    - name: test copy 
-      run: |
-        Copy-Item "./src/*.sln" -Destination "./release"
     - name: Build MSI
       run: |
         ./build build --cid 7.6.1 --bitness x86 filebeat-oss metricbeat-oss
@@ -42,42 +39,3 @@ jobs:
         name: beats
         # Directory containing files to upload
         path: ./release
-  release:
-    runs-on: windows-latest
-    needs: [build]
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v1.0.0
-        with:
-          # Artifact name
-          name: beats
-          # Destination path
-          path: ./release
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: true
-          prerelease: false
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./release/filebeat-oss-7.6.1-windows-x86.msi
-          asset_name: filebeat-oss-7.6.1-windows-x86.msi
-          asset_content_type: application/octet-stream
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./release/metricbeat-oss-7.6.1-windows-x86.msi
-          asset_name: metricbeat-oss-7.6.1-windows-x86.msi
-          asset_content_type: application/octet-stream
