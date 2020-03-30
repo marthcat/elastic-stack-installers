@@ -65,11 +65,11 @@ jobs:
           prerelease: false
       - name: Upload Release Asset
         id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./release/beats.zip
-          asset_name: beats.zip
-          asset_content_type: application/zip
+          asset_path: ./release/filebeat-oss-7.6.1-windows-x86.msi
+          asset_name: filebeat-oss-7.6.1-windows-x86.msi
+          asset_content_type: application/octet-stream
