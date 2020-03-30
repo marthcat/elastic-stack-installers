@@ -22,12 +22,17 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
     # Runs a single command using the runners shell
+    - name: release 폴더 생성
+      run: |
+        mkdir release
+    - name: help
+      run: |
+        help copy
     - name: Build MSI
       run: |
         ./build build --cid 7.6.1 --bitness x86 filebeat-oss metricbeat-oss
     - name: copy MSI
       run: |
-        mkdir release
         copy ./bin/out/metricbeat/*.msi ./release
         copy ./bin/out/filebeatbeat/*.msi ./release
     - name: Upload artifact
