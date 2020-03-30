@@ -1,9 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop" ToolsVersion="Current">
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <InvariantGlobalization>true</InvariantGlobalization>
-    <UseWindowsForms>true</UseWindowsForms>
-  </PropertyGroup>
-</Project>
