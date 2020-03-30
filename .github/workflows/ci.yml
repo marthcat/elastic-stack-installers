@@ -25,17 +25,27 @@ jobs:
     - name: Build MSI
       run: |
         ./build build --cid 7.6.1 --bitness x86 filebeat-oss metricbeat-oss
+        mkdir release
+        copy ./bin/out/metricbeat/*.msi ./release
+        copy ./bin/out/filebeatbeat/*.msi ./release
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         # Artifact name
-        name: metricbeat
+        name: beats
         # Directory containing files to upload
-        path: ./bin/out/metricbeat/metricbeat-oss-7.6.1-windows-x86.msi
+        path: ./release
   release:
     runs-on: windows-latest
     needs: [build]
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v1.0.0
+        with:
+          # Artifact name
+          name: beats
+          # Destination path
+          path: ./release
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -44,7 +54,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          draft: false
+          draft: true
           prerelease: false
       - name: Upload Release Asset
         id: upload-release-asset 
@@ -53,6 +63,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./my-artifact.zip
-          asset_name: my-artifact.zip
+          asset_path: ./release/beats.zip
+          asset_name: beats.zip
           asset_content_type: application/zip
