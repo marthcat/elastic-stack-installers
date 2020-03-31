@@ -15,7 +15,7 @@ processors:
   - add_tags:
       when: 
         equals:
-          DMS50: true
+          fields.DMS50: true
       tags: [DMS50]
       target: "tags"
 
