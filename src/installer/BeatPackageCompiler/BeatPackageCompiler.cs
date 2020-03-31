@@ -47,7 +47,7 @@ namespace Elastic.PackageCompiler.Beats
 
                 Description = pc.Description,
 
-                OutFileName = Path.Combine(opts.PackageOutDir, opts.PackageName),
+                OutFileName = Path.Combine(opts.PackageOutDir, opts.ShortPackageName),
                 Version = new Version(ap.Version),
 
                 // We massage LICENSE.txt into .rtf below
@@ -188,7 +188,7 @@ namespace Elastic.PackageCompiler.Beats
 
             packageContents.Add(pc.IsWindowsService ? service : null);
             project.AddProperty(new Property("WIXUI_EXITDIALOGOPTIONALTEXT",
-                $"NOTE: Start!!!! {serviceDisplayName} Windows service.\n"));
+                $"NOTE: {serviceDisplayName} Windows service.\n"));
 
             var dataContents = new List<WixEntity>();
             var extraDir = Path.Combine(opts.ExtraDir, ap.TargetName);
