@@ -27,8 +27,7 @@ jobs:
         mkdir release
     - name: 버전 추가
       run: |
-        (get-content -encoding utf8 ./extra/filebeat.yml) -replace 'VERSION_INFO_HERE','CI' | out-file -encoding utf8 ./extra/filebeat.yml
-        (get-content -encoding utf8 ./extra/metricbeat.yml) -replace 'VERSION_INFO_HERE','CI' | out-file -encoding utf8 ./extra/metricbeat.yml
+        get-childitem ./extra -recurse -include *.yml | ForEach-Object {(get-content -encoding utf8 $_.FullName) -replace 'VERSION_INFO_HERE','CI' | out-file -encoding utf8 $_.FullName}
     - name: Build MSI
       run: |
         ./build build --cid 7.6.1 --bitness x86 filebeat-oss metricbeat-oss
