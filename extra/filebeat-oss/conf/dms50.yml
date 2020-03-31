@@ -1,6 +1,6 @@
 - type: log
   enabled: ${BLUECATS_DMS50:false}
-  #ignore_older: 48h
+  ignore_older: 48h
   fields_under_root: true
   fields: 
     tag: "logs.dms.50"  
