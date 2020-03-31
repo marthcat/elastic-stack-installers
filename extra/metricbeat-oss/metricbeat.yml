@@ -10,6 +10,7 @@ processors:
   - add_fields:
       fields:
         DMS50: ${BLUECATS_DMS50:false}
+        VERSION: VERSION_INFO_HERE
 
   - add_tags:
       when: 
@@ -17,3 +18,5 @@ processors:
           DMS50: true
       tags: [DMS50]
       target: "tags"
+
+      
