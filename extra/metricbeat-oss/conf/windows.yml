@@ -32,6 +32,18 @@
     - instance_label: disk.name
       measurement_label: disk.physicaldisk.disk_write_bytes_sec
       query: '\PhysicalDisk(*)\Disk Write Bytes/sec'
+    - instance_label: disk.name
+      measurement_label: disk.physicaldisk.disk_read_bytes_sec
+      query: '\PhysicalDisk(*)\Disk Read Bytes/sec'
+    - instance_label: disk.name
+      measurement_label: disk.physicaldisk.per_idle_time
+      query: '\PhysicalDisk(*)\% Idle Time'
+    - instance_label: nic.name
+      measurement_label: nic.total_sec
+      query: '\Network Interface(*)\Bytes Total/sec'
+    - instance_label: nic.name
+      measurement_label: nic.output_queue_length
+      query: '\Network Interface(*)\Output Queue Length'
     - instance_label: nic.name
       measurement_label: nic.in.per_sec
       query: '\Network Interface(*)\Bytes Received/sec'
