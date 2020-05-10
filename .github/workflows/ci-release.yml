@@ -36,7 +36,7 @@ jobs:
         get-childitem ./extra -recurse -include *.yml | ForEach-Object {(get-content -encoding utf8 $_.FullName) -replace 'VERSION_INFO_HERE', $env:GITHUB_VERSION | out-file -encoding utf8 $_.FullName}        
     - name: Build MSI
       run: |
-        ./build build --cid $env:BEAT_VERSION --bitness x86 filebeat-oss metricbeat-oss winlogbeat-oss heartbeat-oss
+        ./build build --cid $env:BEAT_VERSION --bitness x86 filebeat-oss metricbeat-oss winlogbeat-oss heartbeat-oss packetbeat-oss
       env:
         GITHUB_VERSION: ${{ steps.get_version.outputs.version }}
     - name: copy MSI
