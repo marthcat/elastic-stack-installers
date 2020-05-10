@@ -9,7 +9,7 @@ on:
     types: [created]
     
 env:
-  BEAT_VERSION: 7.6.3
+  BEAT_VERSION: 7.6.3-SNAPSHOT
   GITHUB_TOKEN: ${{ github.token }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
