@@ -10,6 +10,9 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  BEAT_VERSION: 7.6.3-SNAPSHOT
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -30,11 +33,10 @@ jobs:
         get-childitem ./extra -recurse -include *.yml | ForEach-Object {(get-content -encoding utf8 $_.FullName) -replace 'VERSION_INFO_HERE','CI' | out-file -encoding utf8 $_.FullName}
     - name: Build MSI
       run: |
-        ./build build --cid 7.6.2 --bitness x86 filebeat-oss metricbeat-oss
+        ./build build --cid $env:BEAT_VERSION --bitness x86 filebeat-oss metricbeat-oss
     - name: copy MSI
       run: |
-        Copy-Item "./bin/out/metricbeat/*.msi"  -Destination "./release"
-        Copy-Item "./bin/out/filebeat/*.msi"  -Destination "./release"
+        Copy-Item "./bin/out/**/*.msi"  -Destination "./release"
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
