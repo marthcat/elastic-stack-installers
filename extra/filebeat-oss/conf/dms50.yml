@@ -1,12 +1,14 @@
 - type: log
   enabled: ${BLUECATS_DMS50:false}
   ignore_older: 48h
-  fields_under_root: true
-  fields: 
-    tag: "logs.dms.50"  
-  tags: ["DMS50"]
   multiline.pattern: '^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^[1-9]'
   multiline.negate: true
   multiline.match: before
   paths:
     - ${BLUECATS_DMS50_ROOTDIR:d:/}/#_DM50_#/01.Log/*/Loader_*.log
+  processors:
+  - add_fields:
+      target: mirero
+      fields:
+        KAFKATOPIC: "logs.dms.50"
+        DMS50: true

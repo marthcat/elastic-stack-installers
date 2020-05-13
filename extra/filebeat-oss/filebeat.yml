@@ -19,5 +19,7 @@ output.logstash:
 processors:
   - add_locale: ~
   - add_fields:
+      target: mirero
       fields:
+        BEATNAME: filebeat-VERSION_INFO_HERE
         VERSION: VERSION_INFO_HERE
