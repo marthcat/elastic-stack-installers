@@ -8,15 +8,11 @@ output.logstash:
 processors:
   - add_locale: ~
   - add_fields:
+      fields_under_root: true
       fields:
+        KAFKATOPIC: metricbeat
+        BEATNAME: metricbeat-VERSION_INFO_HERE
         DMS50: ${BLUECATS_DMS50:false}
         VERSION: VERSION_INFO_HERE
 
-  - add_tags:
-      when: 
-        equals:
-          fields.DMS50: true
-      tags: [DMS50]
-      target: "tags"
 
-      
