@@ -10,5 +10,5 @@
   - add_fields:
       target: mirero
       fields:
-        KAFKATOPIC: "logs.dms.50"
-        DMS50: true
+        kafka_topic: "logs.dms.50"
+        dms50: true

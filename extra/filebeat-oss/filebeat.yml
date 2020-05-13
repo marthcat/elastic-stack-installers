@@ -17,9 +17,6 @@ output.logstash:
   hosts: ["${BLUECATS_HOST:?환경변수 값으로 BLUECATS_HOST값을 127.0.0.1:7700 과 같은 형태로 추가하세요.}"]
 
 processors:
-  - add_locale: ~
-  - add_fields:
-      target: mirero
-      fields:
-        BEATNAME: filebeat-VERSION_INFO_HERE
-        VERSION: VERSION_INFO_HERE
+- add_locale: ~
+- add_tags:
+    tags: ${BLUECATS_SITE}
