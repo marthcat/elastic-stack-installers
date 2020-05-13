@@ -8,7 +8,7 @@ output.logstash:
 processors:
   - add_locale: ~
   - add_fields:
-      fields_under_root: true
+      target: mirero
       fields:
         KAFKATOPIC: metricbeat
         BEATNAME: metricbeat-VERSION_INFO_HERE
