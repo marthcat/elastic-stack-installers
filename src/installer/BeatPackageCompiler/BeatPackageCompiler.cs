@@ -26,6 +26,8 @@ namespace Elastic.PackageCompiler.Beats
             if (!ArtifactPackage.FromFilename(opts.PackageName, out var ap))
                 throw new Exception("Unable to parse file name: " + opts.PackageName);
 
+            ap.Version = Environment.GetEnvironmentVariable("GITHUB_VERSION").Trim('v');
+
             var pc = config.GetProductConfig(ap.TargetName);
 
             var companyName = MagicStrings.Elastic;
