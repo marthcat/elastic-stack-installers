@@ -5,8 +5,34 @@ output.logstash:
   enabled: true
   hosts: ["${BLUECATS_HOST:?환경변수 값으로 BLUECATS_HOST값을 127.0.0.1:7700 과 같은 형태로 추가하세요.}"]
 
+heartbeat.monitors:
+- type: tcp
+  schedule: '@every 30s'
+  hosts:  ${BLUECATS_HEARTBEAT_TCP_TARGETS:''}
+  ipv4: true
+  ipv6: true
+  mode: any
+  timeout: 10s
+
+- type: http
+  schedule: '@every 30s'
+  hosts:  ${BLUECATS_HEARTBEAT_HTTP_TARGETS:''}
+  ipv4: true
+  ipv6: true
+  mode: any
+  timeout: 10s
+
 processors:
-  - add_locale: ~
-  - add_fields:
-      fields:
-        VERSION: VERSION_INFO_HERE
+- add_locale: ~
+- add_tags:
+    tags: ${BLUECATS_SITE}  
+- add_fields:
+    target: mirero
+    fields:
+      kafka_topic: heartbeat
+      DMS50: ${BLUECATS_DMS50:false}
+- add_tags:
+    tags: [dms, dms50]
+    when: 
+      equals:
+        mirero.dms50: true      

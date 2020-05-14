@@ -1,11 +1,10 @@
 - type: log
-  enabled: ${BLUECATS_DMS50:false}
   ignore_older: 48h
+  enabled: ${BLUECATS_DMS50:false}
   multiline.pattern: '^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^([^\^]*)\^[1-9]'
   multiline.negate: true
   multiline.match: before
-  paths:
-    - ${BLUECATS_DMS50_ROOTDIR:d:/}/#_DM50_#/01.Log/*/Loader_*.log
+  paths: ${BLUECATS_DMS50_ROOTDIR:d:/}/#_DM50_#/01.Log/*/Loader_*.log
   processors:
   - add_fields:
       target: mirero

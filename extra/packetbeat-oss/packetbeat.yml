@@ -5,8 +5,23 @@ output.logstash:
   enabled: true
   hosts: ["${BLUECATS_HOST:?환경변수 값으로 BLUECATS_HOST값을 127.0.0.1:7700 과 같은 형태로 추가하세요.}"]
 
+packetbeat.flows:
+  period: 30s
+packetbeat.protocols:
+- type: http
+  ports: [80]
+
 processors:
-  - add_locale: ~
-  - add_fields:
-      fields:
-        VERSION: VERSION_INFO_HERE
+- add_locale: ~
+- add_tags:
+    tags: ${BLUECATS_SITE}  
+- add_fields:
+    target: mirero
+    fields:
+      kafka_topic: packetbeat
+      DMS50: ${BLUECATS_DMS50:false}
+- add_tags:
+    tags: [dms, dms50]
+    when: 
+      equals:
+        mirero.dms50: true      
