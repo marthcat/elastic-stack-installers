@@ -15,6 +15,10 @@ winlogbeat.event_logs:
 
 processors:
 - add_locale: ~
+- add_fields:
+    target: beat
+    fields:
+      versoin: VERSION_INFO_HERE    
 - add_tags:
     tags: ${BLUECATS_SITE}  
 - add_fields:
