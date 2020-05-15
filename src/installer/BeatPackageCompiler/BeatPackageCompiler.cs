@@ -32,7 +32,7 @@ namespace Elastic.PackageCompiler.Beats
 
             var companyName = "Mirero";
             var productSetName = MagicStrings.Beats.Name;
-            var displayName = MagicStrings.Beats.Name + " " + ap.TargetName;
+            var displayName = companyName + " " + MagicStrings.Beats.Name + " " + ap.TargetName;
             var exeName = ap.CanonicalTargetName + MagicStrings.Ext.DotExe;
 
             // Generate UUID v5 from product properties.
