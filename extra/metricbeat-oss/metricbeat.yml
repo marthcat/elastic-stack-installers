@@ -7,6 +7,7 @@ output.logstash:
 
 processors:
 - add_locale: ~
+- add_host_metadata: ~
 - add_fields:
     target: beat
     fields:
