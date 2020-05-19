@@ -24,7 +24,7 @@ processors:
     fields:
       version: VERSION_INFO_HERE
 - add_tags:
-    tags: ${BLUECATS_SITE}
+    tags: ${BLUECATS_SITE:?환경변수 값으로 BLUECATS_SITE을 S1 혹은 16L 과 같은 형태로 추가하세요.}
 - add_tags:
     tags: [dms, dms50]
     when: 
