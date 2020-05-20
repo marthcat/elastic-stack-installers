@@ -9,5 +9,5 @@
   - add_fields:
       target: mirero
       fields:
-        kafka_topic: "logs.dms.50"
+        kafka_topic: "filebeat.dms.50"
         dms50: true
